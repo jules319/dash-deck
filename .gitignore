@@ -1,3 +1,10 @@
+# build artifacts
+dash_deck/
+man/
+inst/
+inst/deps/
+R/
+
 # Created by .ignore support plugin (hsz.mobi)
 ### VisualStudioCode template
 .vscode/*
