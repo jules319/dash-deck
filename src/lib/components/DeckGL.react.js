@@ -101,17 +101,31 @@ export default class DeckGL extends React.Component {
     return [r, g, b];
   };
 
+  handlePlotClick = (info, e) => {
+    let plotId = "working";
+    if (info.object) {
+      plotId = info.object.properties.Plot_No;
+    }
+
+    if ('setProps' in this.props){
+      this.props.setProps({selectedFieldPlot: plotId});
+    } else {
+      console.warn(
+        "setProps is not a function of this.props, as a result the following object was not updated:", 
+        {selectedFieldPlot: plotId},
+      );
+    }
+  };
+
   render() {
     let {enableEvents, deckJSON, cropGeoJsonData, timeStep} = this.props;
     const {id, mapboxKey, tooltip, style} = this.props;
-    const getTooltip = makeTooltip(tooltip);
 
     // ******* PARSE AND CONVERT JSON *******
     // If deckJSON is a string, we need to convert into JSON format
     if (typeof(deckJSON) === "string"){
       deckJSON = JSON.parse(deckJSON);
     }
-    console.log(cropGeoJsonData);
     if (typeof(cropGeoJsonData) === "string"){
       cropGeoJsonData = JSON.parse(cropGeoJsonData);
     }
@@ -181,13 +195,13 @@ export default class DeckGL extends React.Component {
         getElevation: timeStep, // Update when timeStep changes
         getFillColor: timeStep
       },
-      onClick: this.handleFieldClick,
+      onClick: this.handlePlotClick, // Use the handlePlotClick method for onClick
     });
     deckProps.layers.push(layer);
 
     return (
       <Deck
-          getTooltip={getTooltip}
+          getTooltip={({ object }) => object && `Plot ${object.properties.Plot_No}`}
           style={style}
           {...deckProps}
       >
@@ -207,6 +221,7 @@ DeckGL.defaultProps = {
     style: {},
     timeStep: 1,
     selectedField: ["Western Corn"],
+    selectedFieldPlot: null
 };
 
 DeckGL.propTypes = {
@@ -237,6 +252,11 @@ DeckGL.propTypes = {
      * The field that will be focused on.
       */
     selectedField: PropTypes.array,
+
+    /**
+     * The current selected plot of the selected field.
+      */
+    selectedFieldPlot: PropTypes.string,
 
     /**
      * The ID used to identify this component in Dash callbacks.
