@@ -118,7 +118,7 @@ export default class DeckGL extends React.Component {
   };
 
   render() {
-    let {enableEvents, deckJSON, cropGeoJsonData, timeStep} = this.props;
+    let {enableEvents, deckJSON, cropGeoJsonData, cropGrowthStageData, timeStep} = this.props;
     const {id, mapboxKey, tooltip, style} = this.props;
 
     // ******* PARSE AND CONVERT JSON *******
@@ -201,7 +201,7 @@ export default class DeckGL extends React.Component {
 
     return (
       <Deck
-          getTooltip={({ object }) => object && `Plot ${object.properties.Plot_No}`}
+          getTooltip={({ object }) => object && `Plot ${object.properties.Plot_No}\n Growth Stage ${cropGrowthStageData.plot[object.properties.Plot_No][timeStep -1]}`}
           style={style}
           {...deckProps}
       >
