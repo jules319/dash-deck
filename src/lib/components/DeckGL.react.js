@@ -92,7 +92,7 @@ export default class DeckGL extends React.Component {
   getColor = f => {
     const { timeStep, cropGrowthStageData } = this.props;
     const plotId = f.properties.Plot_No;
-    let position = cropGrowthStageData.plot[plotId][timeStep -1] / 25;
+    let position = cropGrowthStageData.plot[plotId][timeStep -1] / 17;
     let color1 = [255, 255, 0];
     let color2 = [1, 50, 32];
     let r = Math.round((1 - position) * color1[0] + position * color2[0]);
